@@ -36,15 +36,12 @@ public class Expense{
 
     @Column(name = "expense_amount")
     @NotNull(message = "Expense amount must not be null")
-    @NotBlank
     private BigDecimal amount;
 
     @NotNull(message = "Expense category must not be null")
-    @NotBlank
     private String category;
 
     @NotNull(message = "Expense date must not be null")
-    @NotBlank
     private LocalDate date;
 
     @Column(name = "created_at", nullable = false, updatable = false)

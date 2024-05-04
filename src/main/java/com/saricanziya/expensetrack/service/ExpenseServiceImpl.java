@@ -8,6 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,4 +58,50 @@ public class ExpenseServiceImpl implements ExpenseService{
 
         return expenseRepository.save(existingExpense);
     }
+
+    @Override
+    public List<Expense> readByCategory(String category, Pageable page) {
+        List<Expense> expenseList = expenseRepository.findByCategory(category, page).toList();
+
+        if(!expenseList.isEmpty())
+            return expenseList;
+        throw new ResourceNotFoundException("Expense is not found for category: " + category);
+    }
+
+    @Override
+    public List<Expense> readByName(String name, Pageable page) {
+        List<Expense> expenseList = expenseRepository.findByCategory(name, page).toList();
+
+        if(!expenseList.isEmpty())
+            return expenseList;
+        throw new ResourceNotFoundException("Expense is not found for name: " + name);
+
+    }
+
+    @Override
+    public List<Expense> readByBetweenDate(LocalDate startDate, LocalDate endDate, Pageable page) {
+
+        if(startDate == null){
+            startDate = LocalDate.of(2000, 1, 1);
+        }
+        if(endDate == null){
+            endDate = LocalDate.now();
+        }
+        List<Expense> expenseList = expenseRepository.findByDateBetween(startDate, endDate, page).toList();
+
+        if(!expenseList.isEmpty())
+            return expenseList;
+        throw new ResourceNotFoundException("Expense is not found for between dates: " + startDate + " - " + endDate);
+    }
+
+    @Override
+    public List<Expense> getExpensesAboveAmount(BigDecimal amount, Pageable page) {
+        List<Expense> expenseList = expenseRepository.findByAmountGreaterThanEqual(amount, page).toList();
+
+        if(!expenseList.isEmpty())
+            return expenseList;
+        throw new ResourceNotFoundException("Expense is not found for above amount: " + amount);
+    }
+
+
 }
