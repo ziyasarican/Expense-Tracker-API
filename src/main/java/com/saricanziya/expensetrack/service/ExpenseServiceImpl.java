@@ -70,7 +70,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     @Override
     public List<Expense> readByName(String name, Pageable page) {
-        List<Expense> expenseList = expenseRepository.findByCategory(name, page).toList();
+        List<Expense> expenseList = expenseRepository.findByNameContaining(name, page).toList();
 
         if(!expenseList.isEmpty())
             return expenseList;
